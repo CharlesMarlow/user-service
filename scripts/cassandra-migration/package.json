@@ -1,0 +1,15 @@
+{
+  "name": "cassandra-migration-package",
+  "version": "1.0.0",
+  "description": "Cassandra migration script",
+  "main": "execute-migration.sh",
+  "scripts": {
+    "test": "CASSANDRA_URL=$CASSANDRA_URL KEY_SPACE=$KEY_SPACE CASSANDRA_USER=$CASSANDRA_USER CASSANDRA_PASSWORD=$CASSANDRA_PASSWORD ./execute-migration.sh"
+  },
+  "author": "Gordon",
+  "license": "ISC",
+  "dependencies": {
+    "cassandra-driver": "^4.5.0",
+    "cassandra-migration": "^2.7.0"
+  }
+}

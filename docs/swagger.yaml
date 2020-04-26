@@ -1,0 +1,896 @@
+openapi: 3.0.1
+info:
+  title: Users Micro Service
+  description: >-
+    This is an external Users service API. It manages any user info in the
+    systems, including its personal data, address and additional needed values,
+    all in favour of maintaining the updated and relevant data which is either
+    business-related or provided when a user requests any action in the system.
+  version: 1.0.0
+servers:
+  - url: /v1
+tags:
+  - name: User Details
+    description: 'A user''s data and info, supporting CRUD operations'
+  - name: User Addresses
+    description: All the addresses data of a user
+  - name: User Address
+    description: A user's single address data
+paths:
+  /users:
+    post:
+      tags:
+        - User Details
+      summary: Create a new user in the system
+      operationId: postUser
+      parameters:
+        - name: x-company-user-id
+          in: header
+          description: The User Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: x-company-request-id
+          in: header
+          description: The Request Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: The user's data to be stored
+        content:
+          application/json; charset=utf-8:
+            schema:
+              $ref: '#/components/schemas/user_request'
+        required: true
+      responses:
+        '201':
+          description: Successful Operation
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/user_resource'
+        '400':
+          description: Bad Request
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+        '409':
+          description: Conflict - email already exists
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: Internal Error
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-codegen-request-body-name: User Request
+  '/users/:user_id':
+    get:
+      tags:
+        - User Details
+      summary: Get the user's data by its Id
+      operationId: getUserById
+      parameters:
+        - name: x-company-user-id
+          in: header
+          description: The User Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: x-company-request-id
+          in: header
+          description: The Request Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: user_id
+          in: path
+          description: The user's Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/user_resource'
+        '400':
+          description: Bad Request
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: User was not found
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: Internal Error
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+    put:
+      tags:
+        - User Details
+      summary: Modify an existing user's data by overriding it
+      operationId: putUserById
+      parameters:
+        - name: x-company-user-id
+          in: header
+          description: The User Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: x-company-request-id
+          in: header
+          description: The Request Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: user_id
+          in: path
+          description: The user's Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: The user's data to be modified
+        content:
+          application/json; charset=utf-8:
+            schema:
+              $ref: '#/components/schemas/user_put_request'
+        required: false
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/user_resource'
+        '400':
+          description: Bad Request
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Not Found
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: Internal Error
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-codegen-request-body-name: User data
+    patch:
+      tags:
+        - User Details
+      summary: Modify an existing user's data
+      operationId: patchUserById
+      parameters:
+        - name: x-company-user-id
+          in: header
+          description: The User Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: x-company-request-id
+          in: header
+          description: The Request Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: user_id
+          in: path
+          description: The user's Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: The user's data to be modified
+        content:
+          application/json; charset=utf-8:
+            schema:
+              $ref: '#/components/schemas/user_patch_request'
+        required: true
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/user_resource'
+        '400':
+          description: Bad Request
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Not Found
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: Internal Error
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-codegen-request-body-name: User data
+  '/users/:user_id/addresses':
+    get:
+      tags:
+        - User Addresses
+      summary: Get all addresses of a user by its id
+      operationId: getAddresses
+      parameters:
+        - name: x-company-user-id
+          in: header
+          description: The User Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: x-company-request-id
+          in: header
+          description: The Request Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: user_id
+          in: path
+          description: The user's Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/user_address_resource'
+        '400':
+          description: Bad Request
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: User not found
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: Internal Error
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+    post:
+      tags:
+        - User Address
+      summary: Create a new address for a user and store it in the database
+      operationId: postAddress
+      parameters:
+        - name: x-company-user-id
+          in: header
+          description: The User Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: x-company-request-id
+          in: header
+          description: The Request Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: user_id
+          in: path
+          description: The user's Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: The address data to be stored
+        content:
+          application/json; charset=utf-8:
+            schema:
+              $ref: '#/components/schemas/put_user_address_request'
+        required: true
+      responses:
+        '201':
+          description: Successful Operation
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/user_address_resource'
+        '400':
+          description: Bad Request
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: Internal Error
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-codegen-request-body-name: Address Request
+  '/users/:user_id/addresses/:address_id':
+    get:
+      tags:
+        - User Address
+      summary: Get a user's address by its Id
+      operationId: getAddressById
+      parameters:
+        - name: x-company-user-id
+          in: header
+          description: The User Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: x-company-request-id
+          in: header
+          description: The Request Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: user_id
+          in: path
+          description: The user's Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: address_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/user_address_resource'
+        '400':
+          description: Bad Request
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Not Found
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: Internal Error
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+    put:
+      tags:
+        - User Address
+      summary: Modify a user's existing address data by overriding it
+      operationId: putAddressById
+      parameters:
+        - name: x-company-user-id
+          in: header
+          description: The User Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: x-company-request-id
+          in: header
+          description: The Request Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: user_id
+          in: path
+          description: The user's Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: address_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: The address's data to be modified
+        content:
+          application/json; charset=utf-8:
+            schema:
+              $ref: '#/components/schemas/put_user_address_request'
+        required: false
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/user_address_resource'
+        '400':
+          description: Bad Request
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Not Found
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: Internal Error
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-codegen-request-body-name: Address
+    delete:
+      tags:
+        - User Address
+      summary: Deletes a user's address by its Id
+      operationId: deleteAddressById
+      parameters:
+        - name: x-company-user-id
+          in: header
+          description: The User Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: x-company-request-id
+          in: header
+          description: The Request Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: user_id
+          in: path
+          description: The user's Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: address_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Successful Operation - No content
+          content: {}
+        '400':
+          description: Bad Request
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Not Found
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: Internal Error
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+    patch:
+      tags:
+        - User Address
+      summary: Add or modify to an existing user's address data
+      operationId: patchAddressById
+      parameters:
+        - name: x-company-user-id
+          in: header
+          description: The User Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: x-company-request-id
+          in: header
+          description: The Request Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: user_id
+          in: path
+          description: The user's Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: address_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: The address data to be modified
+        content:
+          application/json; charset=utf-8:
+            schema:
+              $ref: '#/components/schemas/patch_user_address_request'
+        required: false
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/user_address_resource'
+        '400':
+          description: Bad Request
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Not Found
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: Internal Error
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-codegen-request-body-name: Address
+components:
+  schemas:
+    user_request:
+      required:
+        - email_address
+        - first_name
+        - last_name
+        - terms_accepted
+      type: object
+      properties:
+        email_address:
+          type: string
+          description: The user's email address (unique)
+        first_name:
+          type: string
+          description: The user's first name
+        last_name:
+          type: string
+          description: The user's last name
+        marketing_opt_in_accepted:
+          type: boolean
+          description: Boolean to determine if the user has opted in for marketing
+          default: false
+        terms_accepted:
+          type: boolean
+          description: Boolean to determine if the user has accepted the site's terms
+        phone_number:
+          type: string
+          description: The user's phone number
+        additional_values:
+          type: object
+          properties: {}
+      description: User request body
+    user_put_request:
+      required:
+        - email_address
+        - first_name
+        - last_name
+      type: object
+      properties:
+        email_address:
+          type: string
+          description: The user's email address
+        first_name:
+          type: string
+          description: The user's first name
+        last_name:
+          type: string
+          description: The user's last name
+        marketing_opt_in_accepted:
+          type: boolean
+          description: >-
+            Boolean to determine if the user has opted in for marketing
+            (default: false)
+          default: false
+        phone_number:
+          type: string
+          description: The user's phone number
+        additional_values:
+          type: object
+          properties: {}
+    user_patch_request:
+      type: object
+      properties:
+        email_address:
+          type: string
+          description: The user's email address
+        first_name:
+          type: string
+          description: The user's first name
+        last_name:
+          type: string
+          description: The user's last name
+        marketing_opt_in_accepted:
+          type: boolean
+          description: Boolean to determine if the user has opted in for marketing
+          default: false
+        phone_number:
+          type: string
+          description: The user's phone number
+        additional_values:
+          type: object
+          properties: {}
+    user_resource:
+      allOf:
+        - $ref: '#/components/schemas/user_request'
+        - $ref: '#/components/schemas/updatable_object_metadata'
+    put_user_address_request:
+      required:
+        - address_line_1
+        - city
+        - country_code
+        - postal_code
+      type: object
+      properties:
+        nickname:
+          type: string
+          description: A human-readable nickname for the address
+        address_line_1:
+          type: string
+          description: A text line containing street name and number
+        address_line_2:
+          type: string
+          description: 'A text line containing apartment number, floor, entrance, etc.'
+        address_line_3:
+          type: string
+          description: A text line containing additional delivery instructions
+        country_code:
+          type: string
+          description: 3-letter alpha-code for a country (capital letters only)
+        state_province:
+          type: string
+          description: The state or province in which the address is in
+        city:
+          type: string
+          description: The city in which the address is in
+        postal_code:
+          type: string
+          description: The address' zipcode
+        address_type:
+          type: string
+          description: The type of which the address belongs to
+          enum:
+            - RESIDENTIAL
+            - OFFICE
+            - HOTEL
+            - BUSINESS
+    patch_user_address_request:
+      type: object
+      properties:
+        nickname:
+          type: string
+          description: A human-readable nickname for the address
+        address_line_1:
+          type: string
+          description: A text line containing street name and number
+        address_line_2:
+          type: string
+          description: 'A text line containing apartment number, floor, entrance, etc.'
+        address_line_3:
+          type: string
+          description: A text line containing additional delivery instructions
+        country_code:
+          type: string
+          description: 3-letter alpha-code for a country (capital letters only)
+        state_province:
+          type: string
+          description: The state or province in which the address is in
+        city:
+          type: string
+          description: The city in which the address is in
+        postal_code:
+          type: string
+          description: The address' zipcode
+        address_type:
+          type: string
+          description: The type of which the address belongs to
+          enum:
+            - RESIDENTIAL
+            - OFFICE
+            - HOTEL
+            - BUSINESS
+    user_address_resource:
+      required:
+        - address_created
+        - address_line_1
+        - address_updated
+        - city
+        - country_code
+        - id
+        - postal_code
+      type: object
+      properties:
+        id:
+          type: string
+          description: The address Id
+          format: uuid
+        nickname:
+          type: string
+          description: A human-readable nickname for the address
+        address_line_1:
+          type: string
+          description: A text line containing street name and number
+        address_line_2:
+          type: string
+          description: 'A text line containing apartment number, floor, entrance, etc.'
+        address_line_3:
+          type: string
+          description: A text line containing additional delivery instructions
+        country_code:
+          type: string
+          description: 3-letter alpha-code for a country (capital letters only)
+        state_province:
+          type: string
+          description: The state or province in which the address is in
+        city:
+          type: string
+          description: The city in which the address is in
+        postal_code:
+          type: string
+          description: The address' zipcode
+        address_type:
+          type: string
+          description: The type of which the address belongs to
+          enum:
+            - RESIDENTIAL
+            - OFFICE
+            - HOTEL
+            - BUSINESS
+        address_created:
+          type: string
+          description: Timestamp of when the address was created
+          format: date-time
+        address_updated:
+          type: string
+          description: Timestamp of when the address was updated
+          format: date-time
+        user_id_created:
+          type: string
+          description: The user id which created the address
+          format: uuid
+        user_id_updated:
+          type: string
+          description: The user id which last updated the address
+          format: uuid
+    object_metadata:
+      required:
+        - created_time
+        - id
+        - updated_time
+        - user_id_created
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        created_time:
+          type: string
+          format: date-time
+        user_id_created:
+          type: string
+          format: uuid
+        updated_time:
+          type: string
+          format: date-time
+    updatable_object_metadata:
+      allOf:
+        - $ref: '#/components/schemas/object_metadata'
+    error:
+      required:
+        - message
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error's message
+        more_info:
+          type: string
+          description: More info if it exists
+  parameters:
+    company_user_id:
+      name: x-company-user-id
+      in: header
+      description: The User Id
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 15325c58-a41a-4105-bae1-99fa3a8bedc7
+    company_request_id:
+      name: x-company-request-id
+      in: header
+      description: The Request Id
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 5134366e-ce9e-42ea-921b-ebe11257a773
+    user_id:
+      name: user_id
+      in: path
+      description: The user's Id
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: fc1e2015-f408-465a-af97-6621a3754764
+    address_id:
+      name: address_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 08ed91c3-ce96-4c93-b75a-5a0c6eb8d13c

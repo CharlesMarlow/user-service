@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS user_addresses (
+    user_id uuid,
+    id uuid,
+    nickname TEXT,
+    address_line_1 TEXT,
+    address_line_2 TEXT,
+    address_line_3 TEXT,
+    country_code TEXT,
+    state_province TEXT,
+    city TEXT,
+    postal_code TEXT,
+    latitude DOUBLE,
+    longitude DOUBLE,
+    address_type TEXT,
+    address_created TIMESTAMP,
+    address_updated TIMESTAMP,
+    user_id_created uuid,
+    user_id_updated uuid,
+    PRIMARY KEY ((user_id),id)
+);
