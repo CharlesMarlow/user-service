@@ -36,7 +36,7 @@ module.exports = {
   },
   getUserById: async (req, res, next) => {
     const context = req.ctx;
-    const { userId } = context.userId;
+    const { userId } = context;
 
     logger.trace({
       message: 'Starting the getUserById controller',
@@ -52,7 +52,7 @@ module.exports = {
   putUserById: async (req, res, next) => {
     const { body } = req;
     const context = req.ctx;
-    const { userId } = context.userId;
+    const { userId } = context;
 
     logger.trace({
       message: 'Starting in the putUserById controller',
@@ -77,9 +77,10 @@ module.exports = {
     }
   },
   patchUserById: async (req, res, next) => {
+    console.log('===>>>>', req.ctx);
     const { body } = req;
     const context = req.ctx;
-    const { userId } = context.userId;
+    const { userId } = context;
 
     logger.trace({
       message: 'Starting in the patchUserById controller',

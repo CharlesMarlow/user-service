@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "test": "nyc mocha 'test/unit-tests/**/*test.js'",
+    "test": "nyc mocha 'test/unit-tests/**/*test.js' --watch",
     "system-tests": "mocha ./test/system-tests/*.js --timeout 5000"
   },
   "author": "Gordon",
@@ -50,7 +50,7 @@
       "**/scripts/*",
       "**/index.js",
       "**/test/**/**/*.js",
-      "**/router/*.js"
+      "**/routes/*.js"
     ],
     "cache": true,
     "all": true

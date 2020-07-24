@@ -9,19 +9,11 @@ const errors = {
   },
   USER_ID_IS_MISSING: {
     code: 404,
-    message: 'User ID not fount',
+    message: 'User ID not found',
   },
   ADDRESS_ID_IS_MISSING: {
     code: 404,
     message: 'Address ID not found',
-  },
-  IS_NOT_UUID: {
-    code: 400,
-    message: 'Field should match uuid format',
-  },
-  IS_NOT_TIMESTAMP: {
-    code: 400,
-    message: 'Field should match timestamp format',
   },
 };
 

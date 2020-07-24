@@ -1,7 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-const swaggerValidator = require('openapi-validator-middleware');
+const swaggerValidation = require('openapi-validator-middleware');
 const contextExtractor = require('../middlewares/contextExtractor');
 const { setDefault } = require('../middlewares/requestModifier');
 const {
@@ -20,26 +20,66 @@ const {
 } = require('../controllers/addresses');
 
 // v1/users
-router.post('/', swaggerValidator.validate, contextExtractor, setDefault, postUser);
+router.post('/', swaggerValidation.validate, contextExtractor, setDefault, postUser);
 
-// v1/users/:userId
-router.get('/:userId', swaggerValidator.validate, contextExtractor, getUserById);
+// v1/users/:user_id
+router.get('/:user_id', swaggerValidation.validate, contextExtractor, getUserById);
 
-router.put('/:userId', swaggerValidator.validate, contextExtractor, putUserById);
+router.put(
+  '/:user_id',
+  swaggerValidation.validate,
+  contextExtractor,
+  putUserById,
+);
 
-router.patch('/:userId', swaggerValidator.validate, contextExtractor, patchUserById);
+router.patch(
+  '/:user_id',
+  swaggerValidation.validate,
+  contextExtractor,
+  patchUserById,
+);
 
-// v1/users/:userId/addresses
-router.post('/:userId/addresses', swaggerValidator.validate, contextExtractor, postAddress);
+// v1/users/:user_id/addresses
+router.post(
+  '/:user_id/addresses',
+  swaggerValidation.validate,
+  contextExtractor,
+  postAddress,
+);
 
-router.get('/:userId/addresses', swaggerValidator.validate, contextExtractor, getAddresses);
+router.get(
+  '/:user_id/addresses',
+  swaggerValidation.validate,
+  contextExtractor,
+  getAddresses,
+);
 
-// v1/users/:userId/addresses/:addressId
-router.get('/:userId/addresses/:addressId', swaggerValidator.validate, contextExtractor, getAddressById);
+// v1/users/:user_id/addresses/:address_id
+router.get(
+  '/:user_id/addresses/:address_id',
+  swaggerValidation.validate,
+  contextExtractor,
+  getAddressById,
+);
 
-router.put('/:userId/addresses/:addressId', swaggerValidator.validate, contextExtractor, putAddressById);
+router.put(
+  '/:user_id/addresses/:address_id',
+  swaggerValidation.validate,
+  contextExtractor,
+  putAddressById
+);
 
-router.patch('/:userId/addresses/:addressId', swaggerValidator.validate, contextExtractor, patchAddressById);
+router.patch(
+  '/:user_id/addresses/:address_id',
+  swaggerValidation.validate,
+  contextExtractor,
+  patchAddressById
+);
 
-router.delete('/:userId/addresses/:addressId', swaggerValidator.validate, contextExtractor, deleteAddressById);
+router.delete(
+  '/:user_id/addresses/:address_id',
+  swaggerValidation.validate,
+  contextExtractor,
+  deleteAddressById,
+);
 module.exports = router;

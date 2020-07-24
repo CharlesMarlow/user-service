@@ -1,8 +1,7 @@
 module.exports = {
-
   // Headers
-  COMPANY_USER_ID: 'x-company-user-id',
-  COMPANY_REQUEST_ID: 'x-compaby-request-id',
+  COMPANY_USER_ID: 'COMPANY_USER_ID',
+  COMPANY_REQUEST_ID: 'COMPANY_REQUEST_ID',
 
   // Cassandra
   CASSANDRA_URL: 'CASSANDRA_URL',

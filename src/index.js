@@ -2,13 +2,12 @@ const express = require('express');
 
 const app = express();
 const bodyParser = require('body-parser');
-const swaggerValidator = require('openapi-validator-middleware');
+const swaggerValidation = require('openapi-validator-middleware');
 const shutdown = require('graceful-shutdown-express');
 const apiMetrics = require('prometheus-api-metrics');
 const logger = require('./helpers/logger');
 const env = require('../config/env').init();
 const usersRoute = require('./routes/usersRouter');
-// const addressesRoute = require('./routes/addressRouter');
 const healthController = require('./controllers/healthController');
 const errorHandler = require('./middlewares/errorHandler');
 const notFound = require('./middlewares/notFound');
@@ -36,12 +35,11 @@ async function gracefulShutdownCallback() {
     await cassandraClientUtil.init();
 
     const swaggerPath = './docs/swagger.yaml';
-    await swaggerValidator.init(swaggerPath);
+    await swaggerValidation.init(swaggerPath);
 
     app.use(bodyParser.json());
     app.use('/health', healthController.checkHealth);
     app.use('/v1/users', usersRoute);
-    // app.use('/v1/users', addressesRoute);
     app.use(apiMetrics());
     app.use(notFound);
     app.use(errorHandler);

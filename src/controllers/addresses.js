@@ -8,7 +8,7 @@ module.exports = {
   postAddress: async (req, res, next) => {
     const { body } = req;
     const context = req.ctx;
-    const { userId } = context.userId;
+    const { userId } = context;
     const addressToPost = {
       nickname: body.nickname,
       address_line_1: body.address_line_1,
@@ -36,7 +36,7 @@ module.exports = {
   },
   getAddresses: async (req, res, next) => {
     const context = req.ctx;
-    const { userId } = context.userId;
+    const { userId } = context;
 
     logger.trace({
       message: 'Starting in the getAddresses controller',
@@ -52,8 +52,8 @@ module.exports = {
   },
   getAddressById: async (req, res, next) => {
     const context = req.ctx;
-    const { userId } = context.userId;
-    const { addressId } = context.addressId;
+    const { userId } = context;
+    const { addressId } = context;
 
     logger.trace({
       message: 'Starting in the getAddressById controller',
@@ -70,8 +70,8 @@ module.exports = {
   putAddressById: async (req, res, next) => {
     const { body } = req;
     const context = req.ctx;
-    const { userId } = context.userId;
-    const { addressId } = context.addressId;
+    const { userId } = context;
+    const { addressId } = context;
     const addressToPut = {
       nickname: body.nickname,
       address_line_1: body.address_line_1,
@@ -100,8 +100,8 @@ module.exports = {
   patchAddressById: async (req, res, next) => {
     const { body } = req;
     const context = req.ctx;
-    const { userId } = context.userId;
-    const { addressId } = context.addressId;
+    const { userId } = context;
+    const { addressId } = context;
     const addressToPatch = {
       nickname: body.nickname,
       address_line_1: body.address_line_1,
@@ -129,8 +129,8 @@ module.exports = {
   },
   deleteAddressById: async (req, res, next) => {
     const context = req.ctx;
-    const { userId } = context.userId;
-    const { addressId } = context.addressId;
+    const { userId } = context;
+    const { addressId } = context;
 
     logger.trace({
       message: 'Starting in the deleteAddressById controller',

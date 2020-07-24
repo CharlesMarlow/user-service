@@ -9,6 +9,7 @@ info:
   version: 1.0.0
 servers:
   - url: /v1
+basePath: /v1
 tags:
   - name: User Details
     description: 'A user''s data and info, supporting CRUD operations'
@@ -17,7 +18,7 @@ tags:
   - name: User Address
     description: A user's single address data
 paths:
-  /users:
+  '/users':
     post:
       tags:
         - User Details
